@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.hardware.camera2.CameraAccessException
+import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
@@ -15,6 +16,13 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
     private var flashLightStatus = false
+    private val torchCallback = object : CameraManager.TorchCallback() {
+        override fun onTorchModeChanged(cameraId: String?, enabled: Boolean) {
+            super.onTorchModeChanged(cameraId, enabled)
+            flashLightStatus = enabled
+            setFlashLightBtnImage()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +30,20 @@ class MainActivity : AppCompatActivity() {
 
         initViews()
         initListeners()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val cameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
+
+        cameraManager.registerTorchCallback(torchCallback, null)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        val cameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
+
+        cameraManager.unregisterTorchCallback(torchCallback)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -49,49 +71,36 @@ class MainActivity : AppCompatActivity() {
         val hasCameraFlash = packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)
 
         buttonEnable.setOnClickListener {
-            ActivityCompat.requestPermissions(MainActivity@this,
+            ActivityCompat.requestPermissions(MainActivity@ this,
                     arrayOf(Manifest.permission.CAMERA), Companion.CAMERA_REQUEST);
         }
 
         imageFlashlight.setOnClickListener {
             if (hasCameraFlash) {
-                if (flashLightStatus)
-                    flashLightOff();
-                else
-                    flashLightOn();
+                switchFlashLight()
             } else {
-                Toast.makeText(MainActivity@this, "No flash available on your device",
+                Toast.makeText(MainActivity@ this, "No flash available on your device",
                         Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    private fun flashLightOn() {
+    private fun switchFlashLight() {
         val cameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
 
         try {
             val cameraId = cameraManager.cameraIdList[0]
-            cameraManager.setTorchMode(cameraId, true)
-            flashLightStatus = true
-            imageFlashlight.setImageResource(R.drawable.btn_switch_on)
+            cameraManager.setTorchMode(cameraId, !flashLightStatus)
         } catch (e: CameraAccessException) {
         }
     }
 
-    private fun flashLightOff() {
-        val cameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
-
-        try {
-            val cameraId = cameraManager.cameraIdList[0]
-            cameraManager.setTorchMode(cameraId, false)
-            flashLightStatus = false
-            imageFlashlight.setImageResource(R.drawable.btn_switch_off)
-        } catch (e: CameraAccessException) {
-        }
-
+    private fun setFlashLightBtnImage() {
+        val btnImage = if (flashLightStatus) R.drawable.btn_switch_on else R.drawable.btn_switch_off
+        imageFlashlight.setImageResource(btnImage)
     }
 
     companion object {
-        private const val CAMERA_REQUEST = 50
+        private const val CAMERA_REQUEST = 42
     }
 }
