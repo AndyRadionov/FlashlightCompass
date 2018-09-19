@@ -15,10 +15,12 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
     private var flashLightStatus = false
+    private lateinit var cameraManager: CameraManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        cameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
 
         initViews()
         initListeners()
@@ -64,8 +66,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun switchFlashLight() {
-        val cameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
-
         try {
             val cameraId = cameraManager.cameraIdList[0]
             flashLightStatus = !flashLightStatus
