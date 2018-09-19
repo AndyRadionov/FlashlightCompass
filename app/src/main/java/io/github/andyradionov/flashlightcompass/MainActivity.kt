@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.hardware.camera2.CameraAccessException
-import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
@@ -16,13 +15,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
     private var flashLightStatus = false
-    private val torchCallback = object : CameraManager.TorchCallback() {
-        override fun onTorchModeChanged(cameraId: String?, enabled: Boolean) {
-            super.onTorchModeChanged(cameraId, enabled)
-            flashLightStatus = enabled
-            setFlashLightBtnImage()
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,20 +22,6 @@ class MainActivity : AppCompatActivity() {
 
         initViews()
         initListeners()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        val cameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
-
-        cameraManager.registerTorchCallback(torchCallback, null)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        val cameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
-
-        cameraManager.unregisterTorchCallback(torchCallback)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -90,7 +68,9 @@ class MainActivity : AppCompatActivity() {
 
         try {
             val cameraId = cameraManager.cameraIdList[0]
-            cameraManager.setTorchMode(cameraId, !flashLightStatus)
+            flashLightStatus = !flashLightStatus
+            cameraManager.setTorchMode(cameraId, flashLightStatus)
+            setFlashLightBtnImage()
         } catch (e: CameraAccessException) {
         }
     }
