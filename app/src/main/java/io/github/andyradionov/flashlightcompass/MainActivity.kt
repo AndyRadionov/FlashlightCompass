@@ -29,8 +29,6 @@ class MainActivity : AppCompatActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
             CAMERA_REQUEST -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                buttonEnable.isEnabled = false
-                buttonEnable.text = "Camera Enabled"
                 imageFlashlight.isEnabled = true
             } else {
                 Toast.makeText(this@MainActivity, "Permission Denied for the Camera",
@@ -42,20 +40,19 @@ class MainActivity : AppCompatActivity() {
     private fun initViews() {
         val isEnabled = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) ==
                 PackageManager.PERMISSION_GRANTED
-
-        buttonEnable.isEnabled = !isEnabled;
         imageFlashlight.isEnabled = isEnabled;
+
+        if (!isEnabled) {
+            ActivityCompat.requestPermissions(MainActivity@ this,
+                    arrayOf(Manifest.permission.CAMERA), Companion.CAMERA_REQUEST);
+        }
     }
 
     private fun initListeners() {
         val hasCameraFlash = packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)
 
-        buttonEnable.setOnClickListener {
-            ActivityCompat.requestPermissions(MainActivity@ this,
-                    arrayOf(Manifest.permission.CAMERA), Companion.CAMERA_REQUEST);
-        }
-
         imageFlashlight.setOnClickListener {
+
             if (hasCameraFlash) {
                 switchFlashLight()
             } else {
