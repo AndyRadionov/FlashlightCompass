@@ -3,4 +3,5 @@
 
     <string name="compass_dial">Compass Dial</string>
     <string name="compass_hands">Compass Hands</string>
+    <string name="permission_denied_msg">Permission Denied for the Camera</string>
 </resources>

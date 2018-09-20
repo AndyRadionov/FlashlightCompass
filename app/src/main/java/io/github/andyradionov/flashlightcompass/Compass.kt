@@ -57,26 +57,21 @@ class Compass(context: Context) : SensorEventListener {
     }
 
     override fun onSensorChanged(event: SensorEvent) {
-        val alpha = 0.97f
-
         synchronized(this) {
             if (event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
-
-                mGravity[0] = alpha * mGravity[0] + (1 - alpha) * event.values[0]
-                mGravity[1] = alpha * mGravity[1] + (1 - alpha) * event.values[1]
-                mGravity[2] = alpha * mGravity[2] + (1 - alpha) * event.values[2]
-
+                mGravity[0] = ALPHA * mGravity[0] + (1 - ALPHA) * event.values[0]
+                mGravity[1] = ALPHA * mGravity[1] + (1 - ALPHA) * event.values[1]
+                mGravity[2] = ALPHA * mGravity[2] + (1 - ALPHA) * event.values[2]
             }
 
             if (event.sensor.type == Sensor.TYPE_MAGNETIC_FIELD) {
-                mGeomagnetic[0] = alpha * mGeomagnetic[0] + (1 - alpha) * event.values[0]
-                mGeomagnetic[1] = alpha * mGeomagnetic[1] + (1 - alpha) * event.values[1]
-                mGeomagnetic[2] = alpha * mGeomagnetic[2] + (1 - alpha) * event.values[2]
-
+                mGeomagnetic[0] = ALPHA * mGeomagnetic[0] + (1 - ALPHA) * event.values[0]
+                mGeomagnetic[1] = ALPHA * mGeomagnetic[1] + (1 - ALPHA) * event.values[1]
+                mGeomagnetic[2] = ALPHA * mGeomagnetic[2] + (1 - ALPHA) * event.values[2]
             }
 
-            val success = SensorManager.getRotationMatrix(R, I, mGravity,
-                    mGeomagnetic)
+            val success = SensorManager.getRotationMatrix(R, I, mGravity, mGeomagnetic)
+
             if (success) {
                 val orientation = FloatArray(3)
                 SensorManager.getOrientation(R, orientation)
@@ -92,4 +87,8 @@ class Compass(context: Context) : SensorEventListener {
     }
 
     override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
+
+    companion object {
+        private const val ALPHA = 0.97f
+    }
 }
