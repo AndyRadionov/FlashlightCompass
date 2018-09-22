@@ -5,23 +5,30 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.hardware.camera2.CameraAccessException
 import android.hardware.camera2.CameraManager
+import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.View
 import android.view.animation.Animation
 import android.view.animation.RotateAnimation
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
+import java.lang.ref.WeakReference
 
 class MainActivity : AppCompatActivity() {
 
     private var flashLightStatus = false
+    private var flickerStatus = false
     private lateinit var cameraManager: CameraManager
 
     private lateinit var compass: Compass
     private var currentAzimuth: Float = 0.toFloat()
+
+    private val strobPattern = arrayOf(1)
+    private val sosPattern = arrayOf(2, 2, 2, 2, 2, 2, 6, 2, 6, 2, 6, 2, 2, 2, 2, 2, 2, 10)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,25 +86,35 @@ class MainActivity : AppCompatActivity() {
     private fun initListeners() {
         val hasCameraFlash = packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)
 
-        iv_flashlight.setOnClickListener {
+        iv_flashlight.setOnClickListener(
+                BtnListener(this, hasCameraFlash) { switchFlashLight() }
+        )
 
-            if (hasCameraFlash) {
-                switchFlashLight()
-            } else {
-                Toast.makeText(MainActivity@ this, "No flash available on your device",
-                        Toast.LENGTH_SHORT).show();
-            }
-        }
+        btn_strob.setOnClickListener(
+                BtnListener(this, hasCameraFlash) { switchFlicker(strobPattern) }
+        )
+
+        btn_sos.setOnClickListener(
+                BtnListener(this, hasCameraFlash) { switchFlicker(sosPattern) }
+        )
+
     }
 
     private fun switchFlashLight() {
         try {
             val cameraId = cameraManager.cameraIdList[0]
             flashLightStatus = !flashLightStatus
+            flickerStatus = false
             cameraManager.setTorchMode(cameraId, flashLightStatus)
             setFlashLightBtnImage()
         } catch (e: CameraAccessException) {
         }
+    }
+
+    private fun switchFlicker(pattern: Array<Int>) {
+        flickerStatus = !flickerStatus
+        if (!flickerStatus) flashLightStatus = false
+        else FlickerAsync(this, pattern).execute()
     }
 
     private fun setFlashLightBtnImage() {
@@ -117,6 +134,49 @@ class MainActivity : AppCompatActivity() {
         animation.fillAfter = true
 
         iv_hands.startAnimation(animation)
+    }
+
+    private class BtnListener(context: Context, val hasCameraFlash: Boolean, val func: () -> Unit) : View.OnClickListener {
+        private val contextRef = WeakReference<Context>(context)
+        override fun onClick(v: View?) {
+            if (hasCameraFlash) {
+                func()
+            } else {
+                contextRef.get()?.let {
+                    Toast.makeText(contextRef.get(), "No flash available on your device",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
+    private class FlickerAsync(mainActivity: MainActivity, private val pattern: Array<Int>) : AsyncTask<Unit, Unit, Unit>() {
+
+        private val activityRef = WeakReference<MainActivity>(mainActivity)
+
+        override fun onPreExecute() {
+            val activity = activityRef.get()
+            activity?.flashLightStatus = true
+            activity?.setFlashLightBtnImage()
+        }
+
+        override fun doInBackground(vararg params: Unit?) {
+            var strobStatus = false
+            val activity = activityRef.get()
+            val cameraId = activity?.cameraManager!!.cameraIdList[0]
+            var patternIdx = 0
+            while (activityRef.get() != null && activity.flashLightStatus) {
+                strobStatus = !strobStatus
+                activity.cameraManager.setTorchMode(cameraId, strobStatus)
+                Thread.sleep((pattern[patternIdx] * 100).toLong())
+                patternIdx = ++patternIdx % pattern.size
+            }
+            activity.cameraManager.setTorchMode(cameraId, false)
+        }
+
+        override fun onPostExecute(result: Unit?) {
+            activityRef.get()?.setFlashLightBtnImage()
+        }
     }
 
     companion object {
