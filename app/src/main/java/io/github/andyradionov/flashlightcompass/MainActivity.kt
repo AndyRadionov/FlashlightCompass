@@ -14,6 +14,9 @@ import android.view.animation.Animation
 import android.view.animation.RotateAnimation
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
+import android.R.attr.textDirection
+
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -60,6 +63,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onNewAzimuth(azimuth: Float) {
                 adjustArrow(azimuth)
+                updateTextDirection(azimuth)
             }
         }
         compass.setListener(compassListener)
@@ -116,7 +120,27 @@ class MainActivity : AppCompatActivity() {
         animation.repeatCount = 0
         animation.fillAfter = true
 
-        iv_hands.startAnimation(animation)
+        iv_dial.startAnimation(animation)
+    }
+
+    private fun updateTextDirection(azimuth: Float) {
+        val range = (azimuth / (360f / 16f)).toInt()
+        val dirTxt =
+                when (range) {
+                    15, 0 -> "N"
+                    1, 2 -> "NE"
+                    3, 4 -> "E"
+                    5, 6 -> "SE"
+                    7, 8 -> "S"
+                    9, 10 -> "SW"
+                    11, 12 -> "W"
+                    13, 14 -> "NW"
+                    else -> ""
+                }
+
+        tv_direction.text = dirTxt
+
+        tv_degrees.text = "${azimuth.toInt()}°"
     }
 
     companion object {

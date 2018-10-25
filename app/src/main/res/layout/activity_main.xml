@@ -1,39 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@android:color/black">
+
+    <TextView
+        tools:text="NW"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:id="@+id/tv_direction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:layout_marginTop="32dp"
         android:id="@+id/iv_dial"
         android:layout_width="240dp"
         android:layout_height="240dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="60dp"
         android:contentDescription="@string/compass_dial"
-        android:src="@drawable/dial" />
-
-    <ImageView
-        android:id="@+id/iv_hands"
-        android:layout_width="16dp"
-        android:layout_height="180dp"
+        android:src="@drawable/compass_dial"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/iv_dial"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_dial"
-        android:contentDescription="@string/compass_hands"
-        android:scaleType="fitXY"
-        android:src="@drawable/hands" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_direction" />
+
+    <TextView
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="20dp"
+        android:id="@+id/tv_degrees"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/iv_dial"
+        app:layout_constraintLeft_toLeftOf="@id/iv_dial"
+        app:layout_constraintRight_toRightOf="@id/iv_dial"
+        app:layout_constraintTop_toTopOf="@id/iv_dial" />
 
     <ImageView
         android:id="@+id/iv_flashlight"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="40dp"
+        android:src="@drawable/btn_switch_off"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:src="@drawable/btn_switch_off"/>
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
