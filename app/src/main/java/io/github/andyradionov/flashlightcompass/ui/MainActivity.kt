@@ -1,6 +1,8 @@
-package io.github.andyradionov.flashlightcompass
+package io.github.andyradionov.flashlightcompass.ui
 
 import android.Manifest
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.pm.PackageManager
 import android.hardware.camera2.CameraAccessException
@@ -13,22 +15,20 @@ import android.util.Log
 import android.view.animation.Animation
 import android.view.animation.RotateAnimation
 import android.widget.Toast
+import io.github.andyradionov.flashlightcompass.R
+import io.github.andyradionov.flashlightcompass.viewmodels.CompassViewModel
 import kotlinx.android.synthetic.main.activity_main.*
-import android.R.attr.textDirection
-
-
 
 class MainActivity : AppCompatActivity() {
 
     private var flashLightStatus = false
     private lateinit var cameraManager: CameraManager
 
-    private lateinit var compass: Compass
-    private var currentAzimuth: Float = 0.toFloat()
+    private lateinit var compassViewModel: CompassViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_main);
         cameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
 
         initViews()
@@ -38,12 +38,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        compass.start()
+        compassViewModel.startObserveCompass()
     }
 
     override fun onPause() {
         super.onPause()
-        compass.stop()
+        compassViewModel.stopObserveCompass()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -58,15 +58,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupCompass() {
-        compass = Compass(this)
-        val compassListener = object : Compass.CompassListener {
-
-            override fun onNewAzimuth(azimuth: Float) {
-                adjustArrow(azimuth)
-                updateTextDirection(azimuth)
-            }
-        }
-        compass.setListener(compassListener)
+        compassViewModel = ViewModelProviders.of(this).get(CompassViewModel::class.java)
+        compassViewModel.getAzimuthLiveData()
+                .observe(this, Observer<Pair<Float,Float>> { azimuthPair ->
+                    azimuthPair?.let {
+                        adjustArrow(azimuthPair)
+                        updateTextDegrees(azimuthPair.second)
+                    }
+                })
+        compassViewModel.getDirectionLiveData()
+                .observe(this, Observer<String> { direction ->
+                    updateTextDirection(direction!!)
+                })
     }
 
     private fun initViews() {
@@ -109,13 +112,11 @@ class MainActivity : AppCompatActivity() {
         iv_flashlight.setImageResource(btnImage)
     }
 
-    private fun adjustArrow(azimuth: Float) {
-        Log.d(TAG, "will set rotation from $currentAzimuth to $azimuth")
+    private fun adjustArrow(azimuthPair: Pair<Float, Float>) {
+        Log.d(TAG, "will set rotation from ${azimuthPair.first} to ${azimuthPair.second}")
 
-        val animation = RotateAnimation(-currentAzimuth, -azimuth,
-                Animation.RELATIVE_TO_SELF, HANDS_PIVOT, Animation.RELATIVE_TO_SELF, HANDS_PIVOT)
-        currentAzimuth = azimuth
-
+        val animation = RotateAnimation(-azimuthPair.first, -azimuthPair.second,
+                Animation.RELATIVE_TO_SELF, DIAL_PIVOT, Animation.RELATIVE_TO_SELF, DIAL_PIVOT)
         animation.duration = ANIMATION_DURATION
         animation.repeatCount = 0
         animation.fillAfter = true
@@ -123,30 +124,18 @@ class MainActivity : AppCompatActivity() {
         iv_dial.startAnimation(animation)
     }
 
-    private fun updateTextDirection(azimuth: Float) {
-        val range = (azimuth / (360f / 16f)).toInt()
-        val dirTxt =
-                when (range) {
-                    15, 0 -> "N"
-                    1, 2 -> "NE"
-                    3, 4 -> "E"
-                    5, 6 -> "SE"
-                    7, 8 -> "S"
-                    9, 10 -> "SW"
-                    11, 12 -> "W"
-                    13, 14 -> "NW"
-                    else -> ""
-                }
+    private fun updateTextDirection(direction: String) {
+        tv_direction.text = direction
+    }
 
-        tv_direction.text = dirTxt
-
+    private fun updateTextDegrees(azimuth: Float) {
         tv_degrees.text = "${azimuth.toInt()}°"
     }
 
     companion object {
         private val TAG = MainActivity::class.java.simpleName
         private const val CAMERA_REQUEST = 42
-        private const val HANDS_PIVOT = 0.5f
+        private const val DIAL_PIVOT = 0.5f
         private const val ANIMATION_DURATION = 500.toLong()
     }
 }
