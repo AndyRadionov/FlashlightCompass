@@ -115,7 +115,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateTextDegrees(azimuth: Float) {
-        tv_degrees.text = "${azimuth.toInt()}°"
+        tv_degrees.text = "${azimuth.toInt()}"
     }
 
     companion object {
