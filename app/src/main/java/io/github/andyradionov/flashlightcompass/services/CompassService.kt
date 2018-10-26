@@ -43,8 +43,8 @@ class CompassService(context: Context) : SensorEventListener {
         sensorManager.unregisterListener(this)
     }
 
-    fun setListener(l: CompassListener) {
-        listener = l
+    fun setListener(listener: CompassListener) {
+        this.listener = listener
     }
 
     override fun onSensorChanged(event: SensorEvent) {

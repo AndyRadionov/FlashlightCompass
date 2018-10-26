@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@android:color/black">
 
     <TextView
-        tools:text="NW"
-        android:textStyle="bold"
-        android:textColor="@android:color/white"
         android:id="@+id/tv_direction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="NW" />
 
     <ImageView
         android:id="@+id/iv_dial"
@@ -30,22 +30,23 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_direction" />
 
     <TextView
-        android:textColor="@android:color/holo_red_dark"
-        android:textSize="20dp"
         android:id="@+id/tv_degrees"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="@id/iv_dial"
         app:layout_constraintLeft_toLeftOf="@id/iv_dial"
         app:layout_constraintRight_toRightOf="@id/iv_dial"
         app:layout_constraintTop_toTopOf="@id/iv_dial" />
 
-    <ImageView
+    <Button
         android:id="@+id/iv_flashlight"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_marginBottom="40dp"
-        android:src="@drawable/btn_switch_off"
+        android:enabled="false"
+        android:background="@drawable/btn_switch_off"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />

@@ -12,8 +12,8 @@ import io.github.andyradionov.flashlightcompass.services.CompassService
 class CompassViewModel(app: Application) : AndroidViewModel(app) {
 
     private val compassService = CompassService(app)
-    private val azimuthLiveData: MutableLiveData<Pair<Float, Float>> = MutableLiveData()
-    private val directionLiveData: MutableLiveData<String> = MutableLiveData()
+    private val azimuthLiveData= MutableLiveData<Pair<Float, Float>>()
+    private val directionLiveData = MutableLiveData<String>()
     private val compassListener =
             object : CompassService.CompassListener {
                 override fun onNewAzimuth(prevAzimuth: Float, azimuth: Float) {
@@ -28,13 +28,9 @@ class CompassViewModel(app: Application) : AndroidViewModel(app) {
         compassService.setListener(compassListener)
     }
 
-    fun getAzimuthLiveData(): MutableLiveData<Pair<Float, Float>> {
-        return azimuthLiveData
-    }
+    fun getAzimuthLiveData() = azimuthLiveData
 
-    fun getDirectionLiveData(): MutableLiveData<String> {
-        return directionLiveData
-    }
+    fun getDirectionLiveData() = directionLiveData
 
     fun startObserveCompass() {
         compassService.start()
