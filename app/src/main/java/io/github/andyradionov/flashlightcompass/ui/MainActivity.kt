@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initBtnListener() {
         iv_flashlight.setOnClickListener {
-            if (flashLightViewModel.switchFlashLight()) {
+            if (!flashLightViewModel.switchFlashLight()) {
                 Toast.makeText(MainActivity@ this, "No flash available on your device",
                         Toast.LENGTH_SHORT).show();
             }
