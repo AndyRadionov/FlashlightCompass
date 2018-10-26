@@ -5,4 +5,5 @@
     <color name="colorAccent">#eeff41</color>
 
     <color name="gray_pointer">#757575</color>
+    <color name="red_font">#FE0000</color>
 </resources>

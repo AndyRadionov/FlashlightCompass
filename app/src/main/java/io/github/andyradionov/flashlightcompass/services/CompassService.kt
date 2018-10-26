@@ -5,20 +5,20 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import kotlinx.android.synthetic.main.activity_main.*
+import io.github.andyradionov.flashlightcompass.R
 
-class CompassService(context: Context) : SensorEventListener {
+class CompassService(private val context: Context) : SensorEventListener {
 
     private var listener: CompassListener? = null
 
     private val sensorManager: SensorManager
-    private val gSensor: Sensor
-    private val mSensor: Sensor
+    private val gSensor: Sensor?
+    private val mSensor: Sensor?
 
     private val gravity = FloatArray(3)
     private val geomagnetic = FloatArray(3)
-    private val R = FloatArray(9)
-    private val I = FloatArray(9)
+    private val matrixR = FloatArray(9)
+    private val matrixI = FloatArray(9)
 
     private var azimuth: Float = 0f
     private var azimuthFix: Float = 0f
@@ -61,11 +61,11 @@ class CompassService(context: Context) : SensorEventListener {
                 geomagnetic[2] = ALPHA * geomagnetic[2] + (1 - ALPHA) * event.values[2]
             }
 
-            val success = SensorManager.getRotationMatrix(R, I, gravity, geomagnetic)
+            val success = SensorManager.getRotationMatrix(matrixR, matrixI, gravity, geomagnetic)
 
             if (success) {
                 val orientation = FloatArray(3)
-                SensorManager.getOrientation(R, orientation)
+                SensorManager.getOrientation(matrixR, orientation)
 
                 val prevAzimuth = azimuth
                 azimuth = Math.toDegrees(orientation[0].toDouble()).toFloat() // orientation
@@ -80,14 +80,14 @@ class CompassService(context: Context) : SensorEventListener {
     private fun getDirection(azimuth: Float): String {
         val range = (azimuth / (360f / 16f)).toInt()
         return when (range) {
-                    15, 0 -> "N"
-                    1, 2 -> "NE"
-                    3, 4 -> "E"
-                    5, 6 -> "SE"
-                    7, 8 -> "S"
-                    9, 10 -> "SW"
-                    11, 12 -> "W"
-                    13, 14 -> "NW"
+                    15, 0 -> context.getString(R.string.north)
+                    1, 2 -> context.getString(R.string.north_east)
+                    3, 4 -> context.getString(R.string.east)
+                    5, 6 -> context.getString(R.string.south_east)
+                    7, 8 -> context.getString(R.string.south)
+                    9, 10 -> context.getString(R.string.south_west)
+                    11, 12 -> context.getString(R.string.west)
+                    13, 14 -> context.getString(R.string.north_west)
                     else -> ""
                 }
     }

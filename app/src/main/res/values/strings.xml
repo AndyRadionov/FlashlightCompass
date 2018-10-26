@@ -1,7 +1,24 @@
 <resources>
-    <string name="app_name">FlashlightCompass</string>
+    <string name="app_name" translatable="false">FlashCompass</string>
 
+    <!--Content descriptions-->
     <string name="compass_dial">Compass Dial</string>
-    <string name="compass_hands">Compass Hands</string>
-    <string name="permission_denied_msg">Permission Denied for the Camera</string>
+
+    <!--Toast messages-->
+    <string name="permission_camera_denied_msg">Permission Denied for the Camera!</string>
+    <string name="no_flash_msg">No flash available on your device!</string>
+
+    <!--Signs-->
+    <string name="degree" translatable="false">°</string>
+    <string name="pointer" translatable="false">▲</string>
+
+    <!--Directions-->
+    <string name="north">N</string>
+    <string name="north_east">NE</string>
+    <string name="east">E</string>
+    <string name="south_east">SE</string>
+    <string name="south">S</string>
+    <string name="south_west">SW</string>
+    <string name="west">W</string>
+    <string name="north_west">NW</string>
 </resources>

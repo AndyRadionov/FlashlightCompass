@@ -4,49 +4,49 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@android:color/black">
+    android:background="@android:color/black"
+    tools:ignore="SpUsage">
 
     <TextView
-        android:textSize="24dp"
         android:id="@+id/tv_direction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="@dimen/direction_margin"
         android:textColor="@android:color/white"
+        android:textSize="@dimen/direction_size"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="NW" />
 
     <TextView
-        android:textSize="20dp"
-        android:text="▲"
-
-        android:layout_marginBottom="14dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/pointer_margin"
+        android:text="@string/pointer"
         android:textColor="@color/gray_pointer"
+        android:textSize="@dimen/pointer_size"
+        app:layout_constraintBottom_toTopOf="@id/iv_dial"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/iv_dial" />
+        app:layout_constraintRight_toRightOf="parent" />
 
     <ImageView
-        android:layout_marginBottom="24dp"
         android:id="@+id/iv_circle"
-        android:layout_width="260dp"
-        android:layout_height="260dp"
+        android:layout_width="@dimen/circle_size"
+        android:layout_height="@dimen/circle_size"
+        android:layout_marginBottom="@dimen/circle_margin"
         android:contentDescription="@string/compass_dial"
         android:src="@drawable/circle"
+        app:layout_constraintBottom_toBottomOf="@id/iv_dial"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/iv_dial"
         app:layout_constraintTop_toTopOf="@+id/iv_dial" />
 
     <ImageView
         android:id="@+id/iv_dial"
-        android:layout_width="220dp"
-        android:layout_height="220dp"
-        android:layout_marginTop="40dp"
+        android:layout_width="@dimen/dial_size"
+        android:layout_height="@dimen/dial_size"
+        android:layout_marginTop="@dimen/dial_margin"
         android:contentDescription="@string/compass_dial"
         android:src="@drawable/compass_dial"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -54,12 +54,12 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_direction" />
 
     <TextView
-        android:fontFamily="@font/futura"
         android:id="@+id/tv_degrees"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#FE0000"
-        android:textSize="40dp"
+        android:fontFamily="@font/futura"
+        android:textColor="@color/red_font"
+        android:textSize="@dimen/degrees_size"
         app:layout_constraintBottom_toBottomOf="@id/iv_dial"
         app:layout_constraintLeft_toLeftOf="@id/iv_dial"
         app:layout_constraintRight_toRightOf="@id/iv_dial"
@@ -68,22 +68,22 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="@dimen/degree_sign_margin"
         android:fontFamily="@font/futura"
-        android:text="°"
-        android:textColor="#FE0000"
-        android:textSize="30dp"
+        android:text="@string/degree"
+        android:textColor="@color/red_font"
+        android:textSize="@dimen/degree_sign_size"
         app:layout_constraintBottom_toBottomOf="@id/iv_dial"
         app:layout_constraintLeft_toRightOf="@id/tv_degrees"
         app:layout_constraintTop_toTopOf="@id/iv_dial" />
 
     <Button
         android:id="@+id/iv_flashlight"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginBottom="40dp"
-        android:enabled="false"
+        android:layout_width="@dimen/btn_size"
+        android:layout_height="@dimen/btn_size"
+        android:layout_marginBottom="@dimen/button_margin"
         android:background="@drawable/btn_switch_off"
+        android:enabled="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />

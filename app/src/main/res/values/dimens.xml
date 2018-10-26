@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--sizes-->
+    <dimen name="direction_size">24dp</dimen>
+    <dimen name="pointer_size">20dp</dimen>
+    <dimen name="circle_size">260dp</dimen>
+    <dimen name="dial_size">220dp</dimen>
+    <dimen name="degrees_size">40dp</dimen>
+    <dimen name="degree_sign_size">30dp</dimen>
+    <dimen name="btn_size">80dp</dimen>
+
+    <!--margins-->
+    <dimen name="direction_margin">40dp</dimen>
+    <dimen name="pointer_margin">14dp</dimen>
+    <dimen name="circle_margin">24dp</dimen>
+    <dimen name="circle_margin_minus">-24dp</dimen>
+    <dimen name="dial_margin">40dp</dimen>
+    <dimen name="degree_sign_margin">20dp</dimen>
+    <dimen name="button_margin">40dp</dimen>
+</resources>

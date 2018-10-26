@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
             CAMERA_REQUEST -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 iv_flashlight.isEnabled = true
             } else {
-                Toast.makeText(this@MainActivity, getString(R.string.permission_denied_msg),
+                Toast.makeText(this@MainActivity, getString(R.string.permission_camera_denied_msg),
                         Toast.LENGTH_SHORT).show()
             }
         }
@@ -89,7 +89,7 @@ class MainActivity : AppCompatActivity() {
     private fun initBtnListener() {
         iv_flashlight.setOnClickListener {
             if (!flashLightViewModel.switchFlashLight()) {
-                Toast.makeText(MainActivity@ this, "No flash available on your device",
+                Toast.makeText(MainActivity@ this, getString(R.string.no_flash_msg),
                         Toast.LENGTH_SHORT).show();
             }
         }

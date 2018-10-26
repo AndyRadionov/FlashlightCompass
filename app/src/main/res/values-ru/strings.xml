@@ -1,0 +1,18 @@
+<resources>
+    <!--Content descriptions-->
+    <string name="compass_dial">Компасс</string>
+
+    <!--Toast messages-->
+    <string name="permission_camera_denied_msg">Не получено разрешение для камеры!</string>
+    <string name="no_flash_msg">Вспышка недоступна на вашем устройстве!</string>
+
+    <!--Directions-->
+    <string name="north">С</string>
+    <string name="north_east">СВ</string>
+    <string name="east">В</string>
+    <string name="south_east">ЮВ</string>
+    <string name="south">Ю</string>
+    <string name="south_west">ЮЗ</string>
+    <string name="west">З</string>
+    <string name="north_west">СЗ</string>
+</resources>
