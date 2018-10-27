@@ -36,7 +36,7 @@ dependencies {
     implementation "com.android.support:appcompat-v7:$versions.ANDROID_SUPPORT"
     implementation "com.android.support.constraint:constraint-layout:$versions.CONSTRAINT_LAYOUT"
 
-
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
     implementation "android.arch.lifecycle:extensions:$versions.LIFECYCLE"
 
     testImplementation "junit:junit:$versions.JUNIT"

@@ -77,6 +77,85 @@
         app:layout_constraintLeft_toRightOf="@id/tv_degrees"
         app:layout_constraintTop_toTopOf="@id/iv_dial" />
 
+    <android.support.constraint.Guideline
+        android:id="@+id/vertical_guide"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <TextView
+        android:id="@+id/tv_latitude_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/degree_sign_margin"
+        android:layout_marginTop="40dp"
+        android:fontFamily="@font/futura"
+        android:text="Latitude"
+        android:textColor="@android:color/white"
+        android:textSize="14dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/vertical_guide"
+        app:layout_constraintTop_toBottomOf="@id/iv_circle" />
+
+    <TextView
+        android:id="@+id/tv_latitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/degree_sign_margin"
+        android:fontFamily="@font/futura"
+        android:textColor="@android:color/white"
+        android:textSize="14dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/vertical_guide"
+        app:layout_constraintTop_toBottomOf="@id/tv_latitude_label"
+        tools:text="15.15.15" />
+
+    <TextView
+        android:id="@+id/tv_longitude_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/degree_sign_margin"
+        android:layout_marginTop="40dp"
+        android:fontFamily="@font/futura"
+        android:text="Longitude"
+        android:textColor="@android:color/white"
+        android:textSize="14dp"
+        app:layout_constraintLeft_toRightOf="@+id/vertical_guide"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_circle" />
+
+    <TextView
+        android:id="@+id/tv_longitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/degree_sign_margin"
+        android:fontFamily="@font/futura"
+        android:textColor="@android:color/white"
+        android:textSize="14dp"
+        app:layout_constraintLeft_toRightOf="@+id/vertical_guide"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_latitude_label"
+        tools:text="15.15.15" />
+
+    <View
+        android:id="@+id/delimiter"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/gray_pointer"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_latitude" />
+
+    <android.support.constraint.Group
+        android:id="@+id/location_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="tv_latitude_label,tv_latitude,tv_longitude_label,tv_longitude,delimiter" />
+
     <Button
         android:id="@+id/iv_flashlight"
         android:layout_width="@dimen/btn_size"

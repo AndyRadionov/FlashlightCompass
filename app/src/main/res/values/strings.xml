@@ -5,6 +5,7 @@
     <string name="compass_dial">Compass Dial</string>
 
     <!--Toast messages-->
+    <string name="permission_location_denied_msg">Permission Denied for the Location!</string>
     <string name="permission_camera_denied_msg">Permission Denied for the Camera!</string>
     <string name="no_flash_msg">No flash available on your device!</string>
 

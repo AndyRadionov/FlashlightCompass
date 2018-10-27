@@ -3,6 +3,7 @@
     <string name="compass_dial">Компасс</string>
 
     <!--Toast messages-->
+    <string name="permission_location_denied_msg">Не получено разрешение для позиционирования!</string>
     <string name="permission_camera_denied_msg">Не получено разрешение для камеры!</string>
     <string name="no_flash_msg">Вспышка недоступна на вашем устройстве!</string>
 

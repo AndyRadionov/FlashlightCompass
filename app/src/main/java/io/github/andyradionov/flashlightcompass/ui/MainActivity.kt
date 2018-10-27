@@ -1,25 +1,23 @@
 package io.github.andyradionov.flashlightcompass.ui
 
-import android.Manifest
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.content.pm.PackageManager
 import android.os.Bundle
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
+import android.view.View
 import android.view.animation.Animation
 import android.view.animation.RotateAnimation
 import android.widget.Toast
 import io.github.andyradionov.flashlightcompass.R
 import io.github.andyradionov.flashlightcompass.viewmodels.CompassViewModel
 import io.github.andyradionov.flashlightcompass.viewmodels.FlashlightViewModel
+import io.github.andyradionov.flashlightcompass.viewmodels.LocationViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BasePermissionsActivity() {
 
     private lateinit var compassViewModel: CompassViewModel
     private lateinit var flashLightViewModel: FlashlightViewModel
+    private var locationViewModel: LocationViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,28 +32,33 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         compassViewModel.startObserveCompass()
+        locationViewModel?.startLocationUpdates()
     }
 
     override fun onStop() {
         super.onStop()
         compassViewModel.stopObserveCompass()
+        locationViewModel?.stopLocationUpdates()
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        when (requestCode) {
-            CAMERA_REQUEST -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                iv_flashlight.isEnabled = true
-            } else {
-                Toast.makeText(this@MainActivity, getString(R.string.permission_camera_denied_msg),
-                        Toast.LENGTH_SHORT).show()
-            }
-        }
+    override fun enableLocationUpdates() {
+        location_group.visibility = View.VISIBLE
+        locationViewModel = ViewModelProviders.of(this).get(LocationViewModel::class.java)
+        locationViewModel?.getLocationLiveData()
+                ?.observe(this, Observer<Pair<String, String>> { location ->
+                    tv_latitude.text = location?.first
+                    tv_longitude.text = location?.second
+                })
+    }
+
+    override fun setButtonEnabled(isEnabled: Boolean) {
+        iv_flashlight.isEnabled = isEnabled
     }
 
     private fun setupCompass() {
         compassViewModel = ViewModelProviders.of(this).get(CompassViewModel::class.java)
         compassViewModel.getAzimuthLiveData()
-                .observe(this, Observer<Pair<Float,Float>> { azimuthPair ->
+                .observe(this, Observer<Pair<Float, Float>> { azimuthPair ->
                     azimuthPair?.let {
                         adjustArrow(azimuthPair)
                         updateTextDegrees(azimuthPair.second)
@@ -73,17 +76,6 @@ class MainActivity : AppCompatActivity() {
                 .observe(this, Observer<Boolean> { flashLightStatus ->
                     setFlashLightBtnImage(flashLightStatus!!)
                 })
-    }
-
-    private fun requestPermission() {
-        val isEnabled = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) ==
-                PackageManager.PERMISSION_GRANTED
-        iv_flashlight.isEnabled = isEnabled
-
-        if (!isEnabled) {
-            ActivityCompat.requestPermissions(MainActivity@ this,
-                    arrayOf(Manifest.permission.CAMERA), CAMERA_REQUEST);
-        }
     }
 
     private fun initBtnListener() {
@@ -119,7 +111,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val CAMERA_REQUEST = 42
         private const val DIAL_PIVOT = 0.5f
         private const val ANIMATION_DURATION = 500.toLong()
     }
