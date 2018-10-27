@@ -22,4 +22,8 @@
     <string name="south_west">SW</string>
     <string name="west">W</string>
     <string name="north_west">NW</string>
+
+    <!--Locations-->
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
 </resources>

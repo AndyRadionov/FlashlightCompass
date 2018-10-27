@@ -16,4 +16,8 @@
     <string name="south_west">ЮЗ</string>
     <string name="west">З</string>
     <string name="north_west">СЗ</string>
+
+    <!--Locations-->
+    <string name="latitude">Широта</string>
+    <string name="longitude">Долгота</string>
 </resources>
