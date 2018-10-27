@@ -23,7 +23,6 @@ class MainActivity : BasePermissionsActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        requestPermission()
         setupCompass()
         setupFlashLight()
         initBtnListener()
@@ -31,6 +30,7 @@ class MainActivity : BasePermissionsActivity() {
 
     override fun onStart() {
         super.onStart()
+        requestPermission()
         compassViewModel.startObserveCompass()
         locationViewModel?.startLocationUpdates()
     }
