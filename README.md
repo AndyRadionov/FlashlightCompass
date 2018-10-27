@@ -9,4 +9,4 @@ Android Compass with FlashLight and Locations
 App written in Kotlin Language with Android Architectural Componenets and MVVM pattern.
  
 ### Screenshots
-<img src="https://image.ibb.co/ncmpvq/Screenshot-2018-10-27-15-01-46-160-io-github-andyradionov-flashlightcompass.png" width="200"><img src="https://image.ibb.co/eFPL1V/Screenshot-2018-10-27-15-01-52-681-io-github-andyradionov-flashlightcompass.png" width="200">
+<img src="https://image.ibb.co/cDWd5q/flash.png" width="200"><img src="https://image.ibb.co/iTWd5q/slash1.png" width="200">
